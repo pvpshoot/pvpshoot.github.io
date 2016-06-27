@@ -1,0 +1,45 @@
+body {
+  font-family: Roboto, sans-serif; }
+
+.loginForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; }
+  .loginForm__header {
+    text-align: center;
+    display: block;
+    width: 100%; }
+  .loginForm__item {
+    display: block;
+    width: 100%;
+    text-align: center; }
+  .loginForm__button {
+    width: 200px; }
+
+.alcoform {
+  padding: 20px;
+  background: white;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  text-align: center;
+  animation: slide-left .3s ease-out; }
+  .alcoform__container {
+    display: inline-block; }
+  .alcoform__title {
+    margin-top: 70px;
+    font-weight: 100;
+    font-style: 2rem; }
+
+@keyframes slide-left {
+  from {
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    transform: translate3d(0, 0, 0); } }
+
+/*# sourceMappingURL=bundle.css.map*/
