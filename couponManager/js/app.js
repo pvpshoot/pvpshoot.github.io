@@ -37205,7 +37205,7 @@ var app =
 	        _this.state = {
 	            searchTerm: ''
 	        };
-	        (0, _service.bindMethods)(_this, ['makeCoupons', 'mekeCouponsGroups', 'componentDidMount', 'searchUpdated']);
+	        (0, _service.bindMethods)(_this, ['makeCoupons', 'mekeCouponsGroups', 'componentDidMount', 'searchUpdated', 'getSearchPlaceholder']);
 	
 	        return _this;
 	    }
@@ -37262,6 +37262,11 @@ var app =
 	            this.setState({ searchTerm: term });
 	        }
 	    }, {
+	        key: 'getSearchPlaceholder',
+	        value: function getSearchPlaceholder() {
+	            return this.props.storeLang === 'ru' ? 'Поиск' : 'Search';
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var filteredCoupons = this.props.coupons.filter((0, _reactSearchInput.createFilter)(this.state.searchTerm, KEYS_TO_FILTERS));
@@ -37280,7 +37285,11 @@ var app =
 	                            _react2.default.createElement(
 	                                'div',
 	                                { className: 'input-append', style: { marginBottom: '20px' } },
-	                                _react2.default.createElement(_reactSearchInput2.default, { className: 'input-append', onChange: this.searchUpdated }),
+	                                _react2.default.createElement(_reactSearchInput2.default, {
+	                                    className: 'input-append',
+	                                    onChange: this.searchUpdated,
+	                                    placeholder: this.getSearchPlaceholder()
+	                                }),
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    { className: 'input-addon' },
@@ -37302,7 +37311,8 @@ var app =
 	    return {
 	        coupons: state.couponReducer.coupons,
 	        aplication: state.couponReducer.aplication,
-	        isCouponsLoaded: state.couponReducer.isCouponsLoaded
+	        isCouponsLoaded: state.couponReducer.isCouponsLoaded,
+	        storeLang: state.couponReducer.storeLang
 	    };
 	}
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getCouponsFromBase: _couponActions.getCouponsFromBase, setAppReady: _couponActions.setAppReady })(Main);
@@ -37356,7 +37366,7 @@ var app =
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -37392,134 +37402,192 @@ var app =
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Coupon = function (_React$Component) {
-		_inherits(Coupon, _React$Component);
+	  _inherits(Coupon, _React$Component);
 	
-		function Coupon(props) {
-			_classCallCheck(this, Coupon);
+	  function Coupon(props) {
+	    _classCallCheck(this, Coupon);
 	
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Coupon).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Coupon).call(this, props));
 	
-			_this.state = {
-				open: false
-			};
-			(0, _service.bindMethods)(_this, ['componentDidMount', 'toggleCoupon', 'getCouponDate', 'getCouponStatus', 'makeCodes', 'selectCoupon']);
-			return _this;
-		}
+	    _this.state = {
+	      open: false
+	    };
+	    (0, _service.bindMethods)(_this, ['componentDidMount', 'toggleCoupon', 'getCouponDate', 'getCouponStatus', 'makeCodes', 'selectCoupon']);
+	    return _this;
+	  }
 	
-		_createClass(Coupon, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				this.props.active ? this.props.setActiveCoupon(this.props.data) : null;
-			}
-		}, {
-			key: 'toggleCoupon',
-			value: function toggleCoupon() {
-				return this.setState({ open: !this.state.open });
-			}
-		}, {
-			key: 'getCouponDate',
-			value: function getCouponDate(date) {
-				return (0, _moment2.default)(date).format('MMM D YYYY');
-			}
-		}, {
-			key: 'getCouponStatus',
-			value: function getCouponStatus(status) {
-				switch (status) {
-					case 'ACTIVE':
-						return 'active';
-						break;
-					case 'PAUSED':
-						return 'paused';
-						break;
-					case 'EXPIRED':
-						return 'expired';
-						break;
-					case 'USEDUP':
-						return 'usedup';
-						break;
-				}
-			}
-		}, {
-			key: 'makeCodes',
-			value: function makeCodes() {
-				return this.props.codes.map(function (item, key) {
-					return _react2.default.createElement(_code2.default, { code: item, key: key });
-				});
-			}
-		}, {
-			key: 'selectCoupon',
-			value: function selectCoupon(obj) {
-				this.props.setActiveCoupon(obj);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					{ className: _Coupon2.default.container },
-					_react2.default.createElement(
-						'div',
-						{ className: _Coupon2.default.Coupon + ' ' + (this.state.open ? _Coupon2.default.CouponOpen : '') },
-						_react2.default.createElement(
-							'div',
-							{ className: _Coupon2.default.checkbox + ' normalized' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'radio' },
-								_react2.default.createElement(
-									'label',
-									null,
-									_react2.default.createElement('input', { type: 'radio', name: 'coupon', value: '9999', defaultChecked: this.props.active, onChange: this.selectCoupon.bind(this, this.props.data) }),
-									_react2.default.createElement('span', { className: 'radio-label ' + _Coupon2.default.radioLabel })
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: _Coupon2.default.name },
-							this.props.data.name
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: _Coupon2.default.discount },
-							this.props.data.discountType
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: _Coupon2.default.date },
-							_react2.default.createElement(
-								'span',
-								{ className: _Coupon2.default.disabled },
-								this.getCouponDate(this.props.data.creationDate)
-							),
-							' - ',
-							this.props.data.expirationDate ? this.getCouponDate(this.props.data.expirationDate) : 'until deactivated'
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: '\n\t\t\t\t\t\t' + _Coupon2.default.status + '\n\t\t\t\t\t\t' + _Coupon2.default[this.getCouponStatus(this.props.data.status)] + '\n\t\t\t\t\t' },
-							this.props.data.status
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: _Coupon2.default.toggler + '   ' + (this.state.open ? _Coupon2.default.togglerOpen : ''), onClick: this.toggleCoupon },
-							_react2.default.createElement('span', { className: 'icon-arr-down' })
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: _Coupon2.default.footer + ' ' + (this.state.open ? _Coupon2.default.footerOpen : '') + ' normalized' },
-						this.makeCodes()
-					)
-				);
-			}
-		}]);
+	  _createClass(Coupon, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      _moment2.default.locale(this.props.storeLang);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.active ? this.props.setActiveCoupon(this.props.data) : null;
+	    }
+	  }, {
+	    key: 'toggleCoupon',
+	    value: function toggleCoupon() {
+	      return this.setState({ open: !this.state.open });
+	    }
+	  }, {
+	    key: 'getCouponDate',
+	    value: function getCouponDate(date) {
+	      return (0, _moment2.default)(date).format('MMM D YYYY');
+	    }
+	  }, {
+	    key: 'getCouponStatus',
+	    value: function getCouponStatus(status) {
+	      switch (status) {
+	        case 'ACTIVE':
+	          return 'active';
+	          break;
+	        case 'PAUSED':
+	          return 'paused';
+	          break;
+	        case 'EXPIRED':
+	          return 'expired';
+	          break;
+	        case 'USEDUP':
+	          return 'usedup';
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'getCouponStatusText',
+	    value: function getCouponStatusText(status) {
+	      var isRussian = this.props.storeLang === 'ru';
+	      switch (status) {
+	        case 'ACTIVE':
+	          return isRussian ? 'Активный' : 'Active';
+	          break;
+	        case 'PAUSED':
+	          return isRussian ? 'Приостановлен' : 'Paused';
+	          break;
+	        case 'EXPIRED':
+	          return isRussian ? 'Просроченый' : 'Expired';
+	          break;
+	        case 'USEDUP':
+	          return isRussian ? 'Использованый' : 'Usedup';
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'makeCodes',
+	    value: function makeCodes() {
+	      return this.props.codes.map(function (item, key) {
+	        return _react2.default.createElement(_code2.default, { code: item, key: key });
+	      });
+	    }
+	  }, {
+	    key: 'selectCoupon',
+	    value: function selectCoupon(obj) {
+	      this.props.setActiveCoupon(obj);
+	    }
+	  }, {
+	    key: 'getDiscountType',
+	    value: function getDiscountType(type) {
+	      var isRussian = this.props.storeLang === 'ru';
+	      switch (type) {
+	        case 'ABS':
+	          return isRussian ? 'RUB скидки' : 'ABS';
+	          break;
+	        case 'PERCENT':
+	          return isRussian ? 'Скидки в %' : 'PERCENT';
+	          break;
+	        case 'SHIPPING':
+	          return isRussian ? 'Бесплатная доставка' : 'SHIPPING';
+	          break;
+	        case 'ABS_AND_SHIPPING':
+	          return isRussian ? 'Бесплатная доставка + RUB скидки' : 'ABS_AND_SHIPPING';
+	          break;
+	        case 'PERCENT_AND_SHIPPING':
+	          return isRussian ? 'Бесплатная доставка + % скидки' : 'PERCENT_AND_SHIPPING';
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'getEndTime',
+	    value: function getEndTime(time) {
+	      var isRussian = this.props.storeLang === 'ru';
+	      if (!time) {
+	        return isRussian ? 'Бессрочный' : 'until deactivated';
+	      }
+	      return this.getCouponDate(this.props.data.expirationDate);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: _Coupon2.default.container },
+	        _react2.default.createElement(
+	          'div',
+	          { className: _Coupon2.default.Coupon + ' ' + (this.state.open ? _Coupon2.default.CouponOpen : '') },
+	          _react2.default.createElement(
+	            'div',
+	            { className: _Coupon2.default.checkbox + ' normalized' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'radio' },
+	              _react2.default.createElement(
+	                'label',
+	                null,
+	                _react2.default.createElement('input', { type: 'radio', name: 'coupon', value: '9999', defaultChecked: this.props.active, onChange: this.selectCoupon.bind(this, this.props.data) }),
+	                _react2.default.createElement('span', { className: 'radio-label ' + _Coupon2.default.radioLabel })
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: _Coupon2.default.name },
+	            this.props.data.name
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: _Coupon2.default.discount },
+	            this.getDiscountType(this.props.data.discountType)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: _Coupon2.default.date },
+	            _react2.default.createElement(
+	              'span',
+	              { className: _Coupon2.default.disabled },
+	              this.getCouponDate(this.props.data.creationDate)
+	            ),
+	            '-',
+	            this.getEndTime(this.props.data.expirationDate)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: '\n          ' + _Coupon2.default.status + '\n          ' + _Coupon2.default[this.getCouponStatus(this.props.data.status)] + '\n        ' },
+	            this.getCouponStatusText(this.props.data.status)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: _Coupon2.default.toggler + '   ' + (this.state.open ? _Coupon2.default.togglerOpen : ''), onClick: this.toggleCoupon },
+	            _react2.default.createElement('span', { className: 'icon-arr-down' })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: _Coupon2.default.footer + ' ' + (this.state.open ? _Coupon2.default.footerOpen : '') + ' normalized' },
+	          this.makeCodes()
+	        )
+	      );
+	    }
+	  }]);
 	
-		return Coupon;
+	  return Coupon;
 	}(_react2.default.Component);
 	
 	function mapStateToProps(state) {
-		return { selectedCoupon: state.couponReducer.selectedCoupon };
+	  return {
+	    selectedCoupon: state.couponReducer.selectedCoupon,
+	    storeLang: state.couponReducer.storeLang
+	  };
 	}
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { setActiveCoupon: _couponActions.setActiveCoupon })(Coupon);
 
